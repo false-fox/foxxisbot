@@ -1,4 +1,17 @@
-use byte_unit::{AdjustedByte, Byte, Unit};
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// foxxisbot by falsefox
+/// https://falsefox.dev
+/// Created: 2024-05-03
+/// Last modified: 2024-05-03
+/// 
+/// !!!DISCLAIMER!!!
+/// I'm just learning rust for the first time. 
+/// This bot is incredibly bad and the repository only
+/// exists so I can get code review from superior devs.
+/////////////////////////////////////////////////////////
+
+use byte_unit::{Byte, Unit};
 use dotenvy::dotenv;
 use serenity::all::Timestamp;
 use serenity::async_trait;
@@ -6,16 +19,12 @@ use serenity::builder::{CreateAttachment, CreateEmbed, CreateMessage};
 use serenity::gateway::ShardManager;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
-use serenity::model::id::ChannelId;
 use serenity::prelude::*;
-use serenity::prelude::*;
-use std::env;
-use std::ffi::OsStr;
-use std::path::Path;
 use std::sync::Arc;
 use std::time::Duration;
 use sysinfo::System;
 use tokio::fs::File;
+use std::env;
 use tokio::time::sleep;
 struct ShardManagerContainer;
 
