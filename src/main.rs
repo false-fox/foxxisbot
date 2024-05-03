@@ -117,6 +117,7 @@ impl EventHandler for Handler {
                     ("Language", "rust", false),
                     ("Author", "falsefox.dev", false),
                     ("License", "GPL 3.0", false),
+                    ("Repository", "https://github.com/false-fox/foxxisbot", false)
                 ])
                 .timestamp(Timestamp::now());
             let builder = CreateMessage::new().add_embed(embed);
