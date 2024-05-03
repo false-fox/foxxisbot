@@ -4,13 +4,12 @@
 /// https://falsefox.dev
 /// Created: 2024-05-03
 /// Last modified: 2024-05-03
-/// 
+///
 /// !!!DISCLAIMER!!!
-/// I'm just learning rust for the first time. 
+/// I'm just learning rust for the first time.
 /// This bot is incredibly bad and the repository only
 /// exists so I can get code review from superior devs.
 /////////////////////////////////////////////////////////
-
 use byte_unit::{Byte, Unit};
 use dotenvy::dotenv;
 use serenity::all::Timestamp;
@@ -20,11 +19,11 @@ use serenity::gateway::ShardManager;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
 use serenity::prelude::*;
+use std::env;
 use std::sync::Arc;
 use std::time::Duration;
 use sysinfo::System;
 use tokio::fs::File;
-use std::env;
 use tokio::time::sleep;
 struct ShardManagerContainer;
 
@@ -37,15 +36,31 @@ struct Handler;
 #[async_trait]
 impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
+        //Return if a bot sent the message
         if msg.author.bot {
             return;
         }
-
+        //if the bot is pinged, send a help command text
+        let bot_id = ctx.cache.current_user().id;
+        if msg.mentions_user_id(bot_id) {
+            if let Err(why) = msg
+                .channel_id
+                .say(
+                    &ctx.http,
+                    "Hi, i'm foxxis bot. Use ``!help`` to see my commands.",
+                )
+                .await
+            {
+                println!("Error sending message: {why:?}");
+            };
+        }
+        //Sends ping
         if msg.content.starts_with("!ping") {
             if let Err(why) = msg.channel_id.say(&ctx.http, "🏓 Pong!").await {
                 println!("Error sending message: {why:?}");
             }
         }
+        //Sends system information
         if msg.content.starts_with("!sys") {
             let mut sys: System = System::new_all();
             sys.refresh_all();
@@ -108,7 +123,7 @@ impl EventHandler for Handler {
                 println!("Error sending message: {why:?}");
             }
         }
-
+        //Sends info about the bot
         if msg.content.starts_with("!info") {
             let embed = CreateEmbed::new()
                 .title("Foxxisbot Information")
@@ -117,7 +132,11 @@ impl EventHandler for Handler {
                     ("Language", "rust", false),
                     ("Author", "falsefox.dev", false),
                     ("License", "GPL 3.0", false),
-                    ("Repository", "https://github.com/false-fox/foxxisbot", false)
+                    (
+                        "Repository",
+                        "https://github.com/false-fox/foxxisbot",
+                        false,
+                    ),
                 ])
                 .timestamp(Timestamp::now());
             let builder = CreateMessage::new().add_embed(embed);
@@ -126,8 +145,7 @@ impl EventHandler for Handler {
                 println!("Error sending message: {why:?}");
             }
         }
-
-
+        //Sends help
         if msg.content.starts_with("!help") {
             let embed = CreateEmbed::new()
                 .title("Foxxisbot help")
